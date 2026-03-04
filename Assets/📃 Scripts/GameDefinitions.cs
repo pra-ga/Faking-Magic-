@@ -1,0 +1,1 @@
+public enum ItemType { None, Magnet, Pulley, Rope, Flour }
