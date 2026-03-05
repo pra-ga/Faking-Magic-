@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a1ff211bbb8dc0b4f987aebead0a3e97
+guid: 515a4525ddc733f448dcaec8b69d52c4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4570153536982545689
-    second: Rope_0
+      213: -4123006317959381532
+    second: RopeOverPulley_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,11 +46,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.46622932, y: 0.027186671}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rope_0
+      name: RopeOverPulley_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 61
-        height: 161
+        width: 1170
+        height: 221
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7ea0923629d8390c0800000000000000
-      internalID: -4570153536982545689
+      spriteID: 4edf653399328c6c0800000000000000
+      internalID: -4123006317959381532
       vertices: []
       indices: 
       edges: []
@@ -138,8 +138,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Rope_0: -4570153536982545689
+      RopeOverPulley_0: -4123006317959381532
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

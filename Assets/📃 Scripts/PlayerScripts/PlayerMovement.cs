@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Vector2 moveInput;
     private Rigidbody2D rb;
+    private Animator anim; //
 
     [SerializeField] private float moveSpeed = 5f;
 
@@ -15,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         initialScale = transform.localScale;
+        anim = GetComponent<Animator>();
     }
 
     public void OnMove(InputValue value)
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ApplyMovement();
         HandleDirectionalFlip();
+        UpdateAnimation();
     }
 
     private void ApplyMovement()
@@ -48,5 +51,12 @@ public class PlayerMovement : MonoBehaviour
             // Set back to original scale to face right
             transform.localScale = initialScale;
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        // If the absolute value of moveInput is greater than a tiny threshold, we are walking
+        bool isMoving = moveInput.sqrMagnitude > 0.001f;
+        anim.SetBool("isWalking", isMoving);
     }
 }

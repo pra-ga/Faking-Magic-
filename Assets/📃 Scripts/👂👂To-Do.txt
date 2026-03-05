@@ -1,0 +1,13 @@
+Graphics
+    Thought bubbles
+        Magnet on pulley
+        Mill solution
+    Baker change expressions
+    Baker idle movement
+    Baker pulling the rope
+    Delete rope after completion
+
+Functionality
+    Dialogues for NPC
+    Replace rope image when solution is complete
+    Beam, Baker, rope, pulley should all move to complete solution
