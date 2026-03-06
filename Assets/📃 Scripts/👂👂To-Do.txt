@@ -9,5 +9,8 @@ Graphics
 
 Functionality
     Dialogues for NPC
-    Replace rope image when solution is complete
     Beam, Baker, rope, pulley should all move to complete solution
+    ☑️ Replace rope image when solution is complete
+
+Bug
+    The player is not correctly rendered with respect to the rope. Z-order issue

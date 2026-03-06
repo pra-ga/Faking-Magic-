@@ -7,9 +7,19 @@ public class PlayerInteraction : MonoBehaviour
     public float interactRange = 1.5f;
     public LayerMask interactLayer;
 
+    [Header("Dialogue Integration")]
+    public DialogueUIController dialogueUI;
+
     // Called by Player Input "Interact" Action
     public void OnInteract()
     {
+        // 1. Priority: If dialogue is open, use Interact to skip/next line
+        if (dialogueUI != null && dialogueUI.gameObject.activeInHierarchy)
+        {
+            dialogueUI.DisplayNextLine();
+            return; // Block other interactions while talking
+        }
+
         if (currentItem != null)
         {
             TryPlaceItem();
@@ -31,6 +41,16 @@ public class PlayerInteraction : MonoBehaviour
             {
                 npc.Interact();
                 return; // Stop here so we don't try to "pick up" the baker!
+            }
+
+            // 2. Check for the Well Inspector
+            if (hit.TryGetComponent(out WellInspector well)) { well.Interact(this); return; }
+
+            // 2. Check for the Beam
+            if (hit.TryGetComponent(out BeamInspector beam))
+            {
+                beam.Interact(this); // Pass 'this' so it can check currentItem
+                return;
             }
 
             // Check for items

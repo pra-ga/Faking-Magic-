@@ -5,6 +5,8 @@ public class WellInteraction : MonoBehaviour
     [Header("Quest References")]
     [SerializeField] private GameObject physicalPulley; // The actual CarryableItem in the scene
     [SerializeField] private GameObject magnetVisual;   // A static sprite of a magnet on the well
+    [SerializeField] private GameObject decorativePulley;
+    [SerializeField] private GameObject magnetThoughtBubble;
     
     [Header("Effects")]
     [SerializeField] private ParticleSystem clickParticles; // Optional "spark" effect
@@ -18,6 +20,10 @@ public class WellInteraction : MonoBehaviour
 
         if (magnetVisual != null)
             magnetVisual.SetActive(false);
+
+        // Ensure the decorative pulley is visible at the start
+        if (decorativePulley != null)
+            decorativePulley.SetActive(true);
     }
 
     // This is the method you invoke in the QuestSocket's OnItemPlaced() event
@@ -28,6 +34,10 @@ public class WellInteraction : MonoBehaviour
         // 1. Show the magnet stuck to the well
         if (magnetVisual != null)
             magnetVisual.SetActive(true);
+        
+        // Hide the "fake" pulley and show the "real" one
+        if (decorativePulley != null)
+            decorativePulley.SetActive(false);
 
         // 2. Enable the Pulley so the player can now see and pick it up
         if (physicalPulley != null)
@@ -61,5 +71,20 @@ public class WellInteraction : MonoBehaviour
             physicalPulley.transform.position = Vector3.Lerp(startPos, endPos, Mathf.Sin(percent * Mathf.PI / 2));
             yield return null;
         }
+    }
+
+    public void ShowWellVision()
+    {
+        // Only show if the pulley hasn't been unlocked yet
+        if (magnetThoughtBubble != null && !physicalPulley.activeInHierarchy)
+        {
+            magnetThoughtBubble.SetActive(true);
+        }
+    }
+
+    public void HideWellVision()
+    {
+        if (magnetThoughtBubble != null)
+            magnetThoughtBubble.SetActive(false);
     }
 }
