@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,4 +60,28 @@ public class PlayerMovement : MonoBehaviour
         bool isMoving = moveInput.sqrMagnitude > 0.001f;
         anim.SetBool("isWalking", isMoving);
     }
+
+    public void PlayDigAnimation(float duration)
+    {
+        StartCoroutine(DigRoutine(duration));
+    }
+
+    private IEnumerator DigRoutine(float duration)
+    {
+        anim.SetBool("isDigging", true);
+        float originalSpeed = moveSpeed;
+        moveSpeed = 0; 
+        yield return new WaitForSeconds(duration);
+        anim.SetBool("isDigging", false);
+        moveSpeed = originalSpeed;
+    }
+
+    /* private IEnumerator DigRoutine(float duration)
+    {
+        anim.SetBool("isDigging", true);
+        moveSpeed = 0; // Freeze player while digging
+        yield return new WaitForSeconds(duration);
+        anim.SetBool("isDigging", false);
+        moveSpeed = 5f; // Restore speed
+    } */
 }

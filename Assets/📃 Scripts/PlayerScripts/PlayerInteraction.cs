@@ -13,13 +13,21 @@ public class PlayerInteraction : MonoBehaviour
     // Called by Player Input "Interact" Action
     public void OnInteract()
     {
-        // 1. Priority: If dialogue is open, use Interact to skip/next line
         if (dialogueUI != null && dialogueUI.gameObject.activeInHierarchy)
         {
             dialogueUI.DisplayNextLine();
-            return; // Block other interactions while talking
+            return; 
         }
 
+        // 1. Try to Harvest/Dig first (Matches your Sand/Spade logic)
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, interactRange, interactLayer);
+        if (hit && hit.TryGetComponent(out ResourceSource source))
+        {
+            source.OnHarvest(this);
+            return; 
+        }
+
+        // 2. If not digging, check if we should place or pick up
         if (currentItem != null)
         {
             TryPlaceItem();
@@ -43,6 +51,21 @@ public class PlayerInteraction : MonoBehaviour
                 return; // Stop here so we don't try to "pick up" the baker!
             }
 
+            // 1. Resource Harvesting (Sand, Reeds, etc)
+            if (hit.TryGetComponent(out ResourceSource source))
+            {
+                source.OnHarvest(this);
+                return;
+            }
+
+            // 2. Bucket Vision (If empty handed, show siphon thought)
+            if (hit.CompareTag("Bucket") && currentItem == null)
+            {
+                // Assuming the WellInteraction script handles the specific vision toggle
+                hit.GetComponent<WellInteraction>().ShowWellVision(); 
+                return;
+            }
+
             // 2. Check for the Well Inspector
             if (hit.TryGetComponent(out WellInspector well)) { well.Interact(this); return; }
 
@@ -64,22 +87,58 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    public void OnDrop()
+    {
+        // Only drop if we are holding something and not in the middle of a dialogue
+        if (currentItem != null && (dialogueUI == null || !dialogueUI.gameObject.activeInHierarchy))
+        {
+            DropItem();
+        }
+    }
+
     private void TryPlaceItem()
     {
+        // Use OverlapCircleAll to find EVERYTHING in range
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, interactRange, interactLayer);
+        
+        foreach (var hit in hits)
+        {
+            // Skip the item currently in our hand
+            if (currentItem != null && hit.gameObject == currentItem.gameObject) continue;
+
+            if (hit.TryGetComponent(out QuestSocket socket))
+            {
+                if (socket.TryAcceptItem(currentItem))
+                {
+                    currentItem = null; 
+                    return; // Exit once successfully placed
+                }
+            }
+        }
+    }
+
+    /* private void TryPlaceItem()
+    {
         Collider2D hit = Physics2D.OverlapCircle(transform.position, interactRange, interactLayer);
+        
+        // If we hit a socket, try to place it
         if (hit && hit.TryGetComponent(out QuestSocket socket))
         {
             if (socket.TryAcceptItem(currentItem))
             {
-                currentItem = null; // Item is now owned by the socket
+                currentItem = null; 
             }
         }
-        else
-        {
-            // Drop on ground if no socket found
-            currentItem.transform.SetParent(null);
-            currentItem.OnDropped();
-            currentItem = null;
-        }
+        // NOTE: We no longer drop the item automatically here if the socket check fails.
+    } */
+
+    private void DropItem()
+    {
+        if (currentItem == null) return;
+
+        currentItem.transform.SetParent(null);
+        currentItem.OnDropped();
+        currentItem = null;
+        Debug.Log("Item dropped manually.");
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CarryableItem : MonoBehaviour
 {
+    public string itemName;
     public ItemType type;
     public bool isSlotted = false;
 
